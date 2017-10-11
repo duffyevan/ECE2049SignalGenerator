@@ -20,6 +20,7 @@ void swDelay(char numLoops);
 // Declare globals here
 unsigned int potValue = 0;
 unsigned char buttonSetting = 1;
+extern float adcmem1;
 
 // Main
 void main(void)
@@ -41,42 +42,14 @@ void main(void)
     setupADC();
     setupTimerA2();
     setMaxCount(654);
-    timerA2InterruptEnable();
+//    timerA2InterruptEnable();
     while (1)
     {
-        switch (buttonSetting)
-        {
-        case 1:
-            DACSetValue(potValue);
-            break;
-        case 4:
-        case 2:
-            DACSetValue(TA0R * 12); //(12 * potValue / 4096)
-            break;
-        case 8:
-            DACSetValue((TA0R>164)*4095);
-        }
-        int temp;
-        if (temp = getButtons())
-        {
-            buttonSetting = temp;
-            switch (buttonSetting)
-            {
-            case 1: // DC
-                break;
-            case 2: // triangle wave
-                set50HzTriangleWave();
-                break;
-
-            case 4: // sawtooth
-                set100HzSawtoothWave();
-                break;
-            case 8:
-                set100HzSawtoothWave();
-                break;
-            }
-
-        }
+        while(!getButtons());
+        getMeasurements();
+        DACSetValue(potValue);
+        getMeasurements();
+        _no_operation();
     }
 
 }

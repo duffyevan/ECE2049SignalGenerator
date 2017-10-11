@@ -4,14 +4,21 @@
 
 extern unsigned int potValue;
 extern unsigned char buttonSetting;
-unsigned int adcmem1 = 0;
+float adcmem1 = 0;
 
 #pragma vector=ADC12_VECTOR
 __interrupt void ADC12ISR (void){
-        potValue = ADC12MEM0;
-        adcmem1 = ADC12MEM1;
+    getMeasurements();
 }
 
+void getMeasurements(){
+
+    startADCConversion();
+    waitForADC();
+    potValue = ADC12MEM0;
+    adcmem1 = ((float)ADC12MEM1/4095.0)*3.3;
+
+}
 
 
 void setupADC(){
@@ -23,7 +30,7 @@ void setupADC(){
 
     ADC12MCTL0 = ADC12SREF_0 | ADC12INCH_0; // Sets the ref to internal reference. Selects temperature diode for channel.
     ADC12MCTL1 = ADC12INCH_1 | ADC12EOS; // set the input channel to the pot pin (A0) and set it as the end of the sequence
-    enableConversionInterrupt();
+//    enableConversionInterrupt();
 }
 
 void waitForADC(){

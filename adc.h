@@ -8,4 +8,6 @@ int getMeasurement();
 void enableConversionInterrupt();
 float adcReadingToTemperatureInC(unsigned int reading);
 void fillMeasurementsArrayWithInvalidValues();
+void getMeasurements();
+
 #endif
